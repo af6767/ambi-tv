@@ -20,6 +20,16 @@
 #ifndef __AMBITV_SERVER_H__
 #define __AMBITV_SERVER_H__
 
+struct server_conf {
+	/* master file descriptor list */
+	fd_set master;
+	/* maximum file descriptor number */
+	int fdmax;
+	/* listening socket descriptor */
+	int listener;
+};
+extern struct server_conf ambitv_server_conf;
+
 int
 ambitv_server_init(int port);
 

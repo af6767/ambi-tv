@@ -147,6 +147,9 @@ ambitv_runloop()
    unsigned char c = 0;
    fd_set fds, ex_fds;
    struct timeval tv;
+
+	/* NetIO Control */
+	ambitv_server_run();
    
    FD_ZERO(&fds); FD_ZERO(&ex_fds);
    FD_SET(STDIN_FILENO, &fds);
@@ -257,9 +260,6 @@ ambitv_runloop()
       }
    }
 
-	/* NetIO Control */
-	ambitv_server_run();
-	
 finishLoop:
    return ret;
 }
