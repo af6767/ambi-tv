@@ -74,7 +74,7 @@ int ambitv_server_init(int tcpport)
 	return 0;
 }
 
-int ambitv_server_run()
+char ambitv_server_run()
 {
 	/* newly accept()ed socket descriptor */
 	int newfd;
@@ -104,7 +104,7 @@ int ambitv_server_run()
 	if(select(ambitv_server_conf.fdmax+1, &read_fds, NULL, NULL, &tvout) == -1)
 	{
 		perror("Server-select() error lol!");
-		//exit(1);
+		exit(1);
 	}
 
 	/*run through the existing connections looking for data to be read*/
@@ -160,5 +160,5 @@ int ambitv_server_run()
 			}
 		}
 	}
-	return 0;
+	return '0';
 }

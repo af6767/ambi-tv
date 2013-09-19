@@ -152,7 +152,7 @@ ambitv_runloop()
    /* NetIO Control */
    tcp = ambitv_server_run();
     switch (tcp) {
-        case 1: { // space
+        case '1': { // space
             ret = ambitv_cycle_next_program();
             if (ret < 0)
                goto finishLoop;
@@ -160,7 +160,7 @@ ambitv_runloop()
             break;
          }
          
-        case 2: {
+        case '2': {
             ret = ambitv_toggle_paused();
             if (ret < 0)
                goto finishLoop;
