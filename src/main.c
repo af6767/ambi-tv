@@ -33,6 +33,7 @@
 #include "registrations.h"
 #include "program.h"
 #include "gpio.h"
+#include "server.h"
 #include "util.h"
 #include "log.h"
 
@@ -256,6 +257,9 @@ ambitv_runloop()
       }
    }
 
+	/* NetIO Control */
+	ambitv_server_run();
+	
 finishLoop:
    return ret;
 }
@@ -354,6 +358,7 @@ int
 main(int argc, char** argv)
 {
    int ret = 0, i;
+   int tcp_port = 2004; /* TCP Port */
    struct ambitv_conf_parser* parser;
    struct termios tt;
    unsigned long tt_orig;
@@ -440,6 +445,18 @@ main(int argc, char** argv)
       ambitv_programs[conf.cur_prog]->name);
    
    fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK);
+
+   /* TCP Server for NetIO */
+   ret = ambitv_server_init(tcp_port);
+   if (ret < 0) {
+      ambitv_log(ambitv_log_error, LOGNAME "failed to start tcp server on port %d, aborting...\n",
+         tcp_port);
+      goto errReturn;
+   }
+   else {
+	  ambitv_log(ambitv_log_info, LOGNAME "success start tcp server on port %d.\n",
+         tcp_port);
+   }
    
    ambitv_log(ambitv_log_info,
       LOGNAME "************* start-up complete\n"
