@@ -33,7 +33,7 @@ extern struct server_conf ambitv_server_conf;
 int
 ambitv_server_init(int port);
 
-void
+int
 ambitv_server_run();
 
 #endif // __AMBITV_SERVER_H__

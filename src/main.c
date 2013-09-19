@@ -144,12 +144,33 @@ static int
 ambitv_runloop()
 {
    int ret = 0;
+   int tcp = 0;
    unsigned char c = 0;
    fd_set fds, ex_fds;
    struct timeval tv;
 
-	/* NetIO Control */
-	ambitv_server_run();
+   /* NetIO Control */
+   tcp = ambitv_server_run();
+    switch (tcp) {
+        case 1: { // space
+            ret = ambitv_cycle_next_program();
+            if (ret < 0)
+               goto finishLoop;
+            
+            break;
+         }
+         
+        /*case 't': {
+            ret = ambitv_toggle_paused();
+            if (ret < 0)
+               goto finishLoop;
+            
+            break;
+         }*/
+         
+         default:
+            break;
+	}
    
    FD_ZERO(&fds); FD_ZERO(&ex_fds);
    FD_SET(STDIN_FILENO, &fds);

@@ -74,7 +74,7 @@ int ambitv_server_init(int tcpport)
 	return 0;
 }
 
-void ambitv_server_run()
+int ambitv_server_run()
 {
 	/* newly accept()ed socket descriptor */
 	int newfd;
@@ -152,6 +152,7 @@ void ambitv_server_run()
 				}
 				else
 				{
+					return 1;
 					printf("Here is the message: %s\n",buf);
 					close(i);
 					FD_CLR(i, &ambitv_server_conf.master);
@@ -159,5 +160,5 @@ void ambitv_server_run()
 			}
 		}
 	}
-
+	return 0;
 }
