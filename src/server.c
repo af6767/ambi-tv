@@ -74,7 +74,7 @@ int ambitv_server_init(int tcpport)
 	return 0;
 }
 
-char ambitv_server_run()
+int ambitv_server_run()
 {
 	/* newly accept()ed socket descriptor */
 	int newfd;
@@ -155,10 +155,11 @@ char ambitv_server_run()
 					printf("TCP comand: %s\n",buf);
 					close(i);
 					FD_CLR(i, &ambitv_server_conf.master);
-					return buf;
+					int comand = buf[0];
+					return comand;
 				}
 			}
 		}
 	}
-	return '0';
+	return 0;
 }
