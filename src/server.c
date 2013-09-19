@@ -25,10 +25,10 @@ int ambitv_server_init(int tcpport)
 	port = tcpport;
 
 	/* clear the master and temp sets */
-	FD_ZERO(&ambitv_server_conf->master);
+	FD_ZERO(&ambitv_server_conf.master);
 
 	/* get the listener */
-	if((ambitv_server_conf->listener = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+	if((ambitv_server_conf.listener = socket(AF_INET, SOCK_STREAM, 0)) == -1)
 	{
 		perror("Server-socket() error lol!");
 		/*just exit lol!*/
@@ -36,7 +36,7 @@ int ambitv_server_init(int tcpport)
 	}
 	printf("Server-socket() is OK...\n");
 	/*"address already in use" error message */
-	if(setsockopt(ambitv_server_conf->listener, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
+	if(setsockopt(ambitv_server_conf.listener, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
 	{
 		perror("Server-setsockopt() error lol!");
 		return -1;
@@ -49,7 +49,7 @@ int ambitv_server_init(int tcpport)
 	serveraddr.sin_port = htons(port);
 	memset(&(serveraddr.sin_zero), '\0', 8);
 
-	if(bind(ambitv_server_conf->listener, (struct sockaddr *)&serveraddr, sizeof(serveraddr)) == -1)
+	if(bind(ambitv_server_conf.listener, (struct sockaddr *)&serveraddr, sizeof(serveraddr)) == -1)
 	{
 		perror("Server-bind() error lol!");
 		return -1;
@@ -57,7 +57,7 @@ int ambitv_server_init(int tcpport)
 	printf("Server-bind() is OK...\n");
 
 	/* listen */
-	if(listen(ambitv_server_conf->listener, MAXCLIENTS) == -1)
+	if(listen(ambitv_server_conf.listener, MAXCLIENTS) == -1)
 	{
 		perror("Server-listen() error lol!");
 		return -1;
@@ -65,9 +65,9 @@ int ambitv_server_init(int tcpport)
 	printf("Server-listen() is OK...\n");
 
 	/* add the listener to the master set */
-	FD_SET(ambitv_server_conf->listener, &ambitv_server_conf->master);
+	FD_SET(ambitv_server_conf.listener, &ambitv_server_conf.master);
 	/* keep track of the biggest file descriptor */
-	ambitv_server_conf->fdmax = ambitv_server_conf->listener; /* so far, it's this one*/
+	ambitv_server_conf.fdmax = ambitv_server_conf.listener; /* so far, it's this one*/
 
 	return 0;
 }
@@ -97,24 +97,24 @@ void ambitv_server_run()
 	FD_ZERO(&read_fds);
 
 	/* copy it */
-	read_fds = ambitv_server_conf->master;
+	read_fds = ambitv_server_conf.master;
 
-	if(select(ambitv_server_conf->fdmax+1, &read_fds, NULL, NULL, &tvout) == -1)
+	if(select(ambitv_server_conf.fdmax+1, &read_fds, NULL, NULL, &tvout) == -1)
 	{
 		perror("Server-select() error lol!");
 		//exit(1);
 	}
 
 	/*run through the existing connections looking for data to be read*/
-	for(i = 0; i <= ambitv_server_conf->fdmax; i++)
+	for(i = 0; i <= ambitv_server_conf.fdmax; i++)
 	{
 		if(FD_ISSET(i, &read_fds))
 		{ /* we got one... */
-			if(i == ambitv_server_conf->listener)
+			if(i == ambitv_server_conf.listener)
 			{
 				/* handle new connections */
 				addrlen = sizeof(clientaddr);
-				if((newfd = accept(ambitv_server_conf->listener, (struct sockaddr *)&clientaddr, &addrlen)) == -1)
+				if((newfd = accept(ambitv_server_conf.listener, (struct sockaddr *)&clientaddr, &addrlen)) == -1)
 				{
 					perror("Server-accept() error lol!");
 				}
@@ -122,10 +122,10 @@ void ambitv_server_run()
 				{
 					printf("Server-accept() is OK...\n");
 
-					FD_SET(newfd, &ambitv_server_conf->master); /* add to master set */
-					if(newfd > ambitv_server_conf->fdmax)
+					FD_SET(newfd, &ambitv_server_conf.master); /* add to master set */
+					if(newfd > ambitv_server_conf.fdmax)
 					{ /* keep track of the maximum */
-						ambitv_server_conf->fdmax = newfd;
+						ambitv_server_conf.fdmax = newfd;
 					}
 					printf("New connection from %s on socket %d\n", inet_ntoa(clientaddr.sin_addr), newfd);
 				}
@@ -146,13 +146,13 @@ void ambitv_server_run()
 					/* close it... */
 					close(i);
 					/* remove from master set */
-					FD_CLR(i, &ambitv_server_conf->master);
+					FD_CLR(i, &ambitv_server_conf.master);
 				}
 				else
 				{
 					printf("Here is the message: %s\n",buf);
 					close(i);
-					FD_CLR(i, &ambitv_server_conf->master);
+					FD_CLR(i, &ambitv_server_conf.master);
 				}
 			}
 		}
