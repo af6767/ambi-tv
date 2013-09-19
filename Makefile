@@ -24,6 +24,7 @@ AMBITV = ambi-tv
 SRC_AMBITV = src/main.c src/video-fmt.c src/parse-conf.c src/component.c   \
 	src/registrations.c src/util.c src/program.c src/log.c src/color.c      \
 	src/gpio.c                                                              \
+	src/server.c															\
 	src/components/v4l2-grab-source.c src/components/avg-color-processor.c  \
 	src/components/lpd8806-spidev-sink.c src/components/timer-source.c      \
 	src/components/edge-color-processor.c                                   \
