@@ -155,7 +155,7 @@ int ambitv_server_run()
 					printf("TCP comand: %s\n",buf);
 					close(i);
 					FD_CLR(i, &ambitv_server_conf.master);
-					int comand = buf[0];
+					int comand = atoi(buf);
 					return comand;
 				}
 			}
