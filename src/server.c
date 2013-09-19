@@ -152,10 +152,10 @@ int ambitv_server_run()
 				}
 				else
 				{
-					return 1;
-					printf("Here is the message: %s\n",buf);
+					printf("TCP comand: %s\n",buf);
 					close(i);
 					FD_CLR(i, &ambitv_server_conf.master);
+					return buf;
 				}
 			}
 		}

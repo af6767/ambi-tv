@@ -160,13 +160,13 @@ ambitv_runloop()
             break;
          }
          
-        /*case 't': {
+        case 2: {
             ret = ambitv_toggle_paused();
             if (ret < 0)
                goto finishLoop;
             
             break;
-         }*/
+        }
          
          default:
             break;
