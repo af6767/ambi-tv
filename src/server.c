@@ -13,6 +13,8 @@
 #define MAXBUFLEN 500
 #define MAXCLIENTS 2
 
+struct server_conf ambitv_server_conf;
+
 int ambitv_server_init(int tcpport)
 {
     int yes = 1;
