@@ -234,8 +234,8 @@ ambitv_v4l2_grab_init_device(struct v4l2_grab* grabber)
       return -EINVAL;
    }
    
-   vid_fmt.fmt.pix.width         = 720;
-   vid_fmt.fmt.pix.height         = 576;
+   vid_fmt.fmt.pix.width 	= 720;
+   vid_fmt.fmt.pix.height 	= 576;
    
    ret = xioctl(grabber->fd, VIDIOC_S_FMT, &vid_fmt);
    if (ret < 0) {
@@ -383,7 +383,15 @@ ambitv_v4l2_grab_read_frame(struct v4l2_grab* grabber)
          eheight  = grabber->height - grabber->crop[0] - grabber->crop[2] - auto_crop[0] - auto_crop[2];
          break;
       }
-      
+      case ambitv_video_format_uyvy: {
+         int cx = (grabber->crop[3] & ~1) + auto_crop[3], cy = grabber->crop[0] + auto_crop[0];
+         
+         ebpl     = grabber->bytesperline ? grabber->bytesperline : 2*grabber->width;
+         eframe   = buffers[buf.index].start + cy * ebpl + cx * 2;
+         ewidth   = grabber->width - grabber->crop[1] - grabber->crop[3] - auto_crop[1] - auto_crop[3];
+         eheight  = grabber->height - grabber->crop[0] - grabber->crop[2] - auto_crop[0] - auto_crop[2];
+         break;
+      } 
       default: {
          eframe   = NULL;
          ewidth   = 0;
