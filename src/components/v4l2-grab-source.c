@@ -233,9 +233,10 @@ ambitv_v4l2_grab_init_device(struct v4l2_grab* grabber)
          grabber->device_name);
       return -EINVAL;
    }
+
    
-   vid_fmt.fmt.pix.width 	= 720;
-   vid_fmt.fmt.pix.height 	= 576;
+   vid_fmt.fmt.pix.width 	= 320;
+   vid_fmt.fmt.pix.height 	= 240;
    
    ret = xioctl(grabber->fd, VIDIOC_S_FMT, &vid_fmt);
    if (ret < 0) {
@@ -243,6 +244,7 @@ ambitv_v4l2_grab_init_device(struct v4l2_grab* grabber)
          grabber->device_name);
       return -EINVAL;
    }
+
    
    grabber->width          = vid_fmt.fmt.pix.width;
    grabber->height         = vid_fmt.fmt.pix.height;
